@@ -1,23 +1,46 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 function App() {
+  const [futbolistas, setFutbolistas] = useState([]);
+
+  useEffect(() => {
+    axios.get('http://localhost:3001/futbolista')
+      .then(response => {
+        setFutbolistas(response.data);
+      })
+      .catch(error => {
+        console.error("Hubo un error al obtener los datos de los futbolistas:", error);
+      });
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Lista de Futbolistas</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombres</th>
+            <th>Apellidos</th>
+            <th>Fecha de Nacimiento</th>
+            <th>Características</th>
+            <th>Posición</th>
+          </tr>
+        </thead>
+        <tbody>
+          {futbolistas.map(futbolista => (
+            <tr key={futbolista.id}>
+              <td>{futbolista.id}</td>
+              <td>{futbolista.nombres}</td>
+              <td>{futbolista.apellidos}</td>
+              <td>{futbolista.fechaNacimiento}</td>
+              <td>{futbolista.caracteristicas}</td>
+              <td>{futbolista.posicion}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
